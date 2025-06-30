@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图片浏览器</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <div class="menu-item active" data-tab="images">图片</div>
+      <div class="menu-item settings" data-tab="settings">设置</div>
+    </div>
+    <div class="main-content">
+      <div class="gallery" id="gallery"></div>
+    </div>
+  </div>
+  <div class="fullscreen-overlay" id="fullscreenOverlay">
+    <img id="fullscreenImage" class="fullscreen-image">
+  </div>
+  <div class="add-image-btn" id="addImageBtn">+</div>
+  <script src="renderer.js"></script>
+</body>
+</html>

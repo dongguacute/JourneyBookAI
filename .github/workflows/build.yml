@@ -1,0 +1,106 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    types: [ closed ]
+
+jobs:
+  build-and-release:
+    if: github.event_name == 'push' || (github.event.pull_request.merged == true)
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.10.0
+          
+      - name: Install dependencies
+        run: pnpm install
+        
+      - name: Add electron-builder
+        run: pnpm add -D electron-builder
+        
+      - name: Build application (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: pnpm run build:linux
+        
+      - name: Build application (Windows)
+        if: matrix.os == 'windows-latest'
+        run: pnpm run build:win
+        
+      - name: Build application (macOS)
+        if: matrix.os == 'macos-latest'
+        run: pnpm run build:mac
+        
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}-build
+          path: dist/
+          retention-days: 30
+          
+  release:
+    needs: build-and-release
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true)
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+          
+      - name: Get version from package.json
+        id: get_version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+        
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.get_version.outputs.VERSION }}-${{ github.run_number }}
+          release_name: Release v${{ steps.get_version.outputs.VERSION }}-${{ github.run_number }}
+          body: |
+            Auto-generated release for JourneyBookAI
+            
+            Changes in this release:
+            - Latest changes from main branch
+            
+            ## Downloads
+            - Windows: `.exe` installer
+            - macOS: `.dmg` installer  
+            - Linux: `.AppImage` or `.deb` package
+          draft: false
+          prerelease: false
+          
+      - name: Upload Release Assets
+        run: |
+          for file in ./artifacts/**/*; do
+            if [ -f "$file" ] && [[ "$file" =~ \.(exe|dmg|AppImage|deb|zip)$ ]]; then
+              echo "Uploading $file"
+              gh release upload v${{ steps.get_version.outputs.VERSION }}-${{ github.run_number }} "$file"
+            fi
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

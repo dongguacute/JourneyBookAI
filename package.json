@@ -8,10 +8,11 @@
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "electron-builder",
-    "build:win": "electron-builder --win",
-    "build:mac": "electron-builder --mac",
-    "build:linux": "electron-builder --linux",
-    "dist": "pnpm run build"
+    "build:win": "electron-builder --win --publish=never",
+    "build:mac": "electron-builder --mac --publish=never",
+    "build:linux": "electron-builder --linux --publish=never",
+    "dist": "pnpm run build",
+    "postinstall": "electron-builder install-app-deps"
   },
   "build": {
     "appId": "com.journeybookai.app",
@@ -25,7 +26,20 @@
       "!dist/**/*",
       "!.git/**/*",
       "!.github/**/*",
-      "!*.md"
+      "!*.md",
+      "!.gitignore"
+    ],
+    "extraResources": [
+      {
+        "from": "img",
+        "to": "img",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "search",
+        "to": "search",
+        "filter": ["**/*"]
+      }
     ],
     "win": {
       "target": [
@@ -33,7 +47,8 @@
           "target": "nsis",
           "arch": ["x64"]
         }
-      ]
+      ],
+      "artifactName": "${productName}-${version}-win-${arch}.${ext}"
     },
     "mac": {
       "target": [
@@ -42,7 +57,8 @@
           "arch": ["universal"]
         }
       ],
-      "category": "public.app-category.photography"
+      "category": "public.app-category.photography",
+      "artifactName": "${productName}-${version}-mac-${arch}.${ext}"
     },
     "linux": {
       "target": [
@@ -55,13 +71,16 @@
           "arch": ["x64"]
         }
       ],
-      "category": "Graphics"
+      "category": "Graphics",
+      "artifactName": "${productName}-${version}-linux-${arch}.${ext}"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
+      "createStartMenuShortcut": true,
+      "installerIcon": "img/icon.ico",
+      "uninstallerIcon": "img/icon.ico"
     }
   },
   "keywords": ["electron", "photo", "ai", "album"],

@@ -33,24 +33,51 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
         
-      - name: Build application (Ubuntu)
-        if: matrix.os == 'ubuntu-latest'
-        run: pnpm run build:linux
+      - name: List installed packages (debug)
+        run: pnpm list
         
+      - name: Verify electron-builder installation
+        run: pnpm electron-builder --help || echo "electron-builder not found"
+        
+      - name: Build application (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          echo "Building for Linux..."
+          pnpm run build:linux
+        env:
+          DEBUG: electron-builder
+          
       - name: Build application (Windows)
         if: matrix.os == 'windows-latest'
-        run: pnpm run build:win
-        
+        run: |
+          echo "Building for Windows..."
+          pnpm run build:win
+        env:
+          DEBUG: electron-builder
+          
       - name: Build application (macOS)
         if: matrix.os == 'macos-latest'
-        run: pnpm run build:mac
-        
+        run: |
+          echo "Building for macOS..."
+          pnpm run build:mac
+        env:
+          DEBUG: electron-builder
+          
+      - name: List build output (debug)
+        run: |
+          echo "Listing dist directory:"
+          ls -la dist/ || echo "dist directory not found"
+          find . -name "*.exe" -o -name "*.dmg" -o -name "*.AppImage" -o -name "*.deb" 2>/dev/null || echo "No build artifacts found"
+          
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}-build
-          path: dist/
+          path: |
+            dist/**/*
+            !dist/**/node_modules/**
           retention-days: 30
+          if-no-files-found: warn
           
   release:
     needs: build-and-release
@@ -65,6 +92,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: ./artifacts
+          
+      - name: List downloaded artifacts (debug)
+        run: |
+          echo "Downloaded artifacts:"
+          find ./artifacts -type f -name "*" | head -20
           
       - name: Get version from package.json
         id: get_version
@@ -93,10 +125,10 @@ jobs:
           
       - name: Upload Release Assets
         run: |
-          for file in ./artifacts/**/*; do
-            if [ -f "$file" ] && [[ "$file" =~ \.(exe|dmg|AppImage|deb|zip)$ ]]; then
+          for file in $(find ./artifacts -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.AppImage" -o -name "*.deb" -o -name "*.zip" \)); do
+            if [ -f "$file" ]; then
               echo "Uploading $file"
-              gh release upload v${{ steps.get_version.outputs.VERSION }}-${{ github.run_number }} "$file"
+              gh release upload v${{ steps.get_version.outputs.VERSION }}-${{ github.run_number }} "$file" || echo "Failed to upload $file"
             fi
           done
         env:

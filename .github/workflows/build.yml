@@ -99,15 +99,14 @@ jobs:
           echo "Downloaded artifacts:"
           find ./artifacts -type f -name "*" | head -20
           
-      - name: Get version from package.json
-        id: get_version
-        run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+      - name: Get commit count as version
+        id: get_commit_count
+        run: echo "COMMITS=$(git rev-list --count HEAD)" >> $GITHUB_OUTPUT
         
       - name: Create Release and Upload Assets
         run: |
-          # Create release
-          gh release create v${{ steps.get_version.outputs.VERSION }}-${{ github.run_number }} \
-            --title "Release v${{ steps.get_version.outputs.VERSION }}-${{ github.run_number }}" \
+          gh release create v1.0.${{ steps.get_commit_count.outputs.COMMITS }} \
+            --title "Release v1.0.${{ steps.get_commit_count.outputs.COMMITS }}" \
             --notes "Auto-generated release for JourneyBookAI" \
             ./artifacts/**/*.{exe,dmg,AppImage,deb,zip} || true
         env:

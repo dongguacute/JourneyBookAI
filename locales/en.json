@@ -1,0 +1,37 @@
+{
+  "app": {
+    "title": "Image Browser"
+  },
+  "menu": {
+    "images": "Images",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Switch Theme:",
+    "theme_light": "Light Mode",
+    "theme_dark": "Dark Mode",
+    "language": "Select Language:",
+    "language_zh": "中文",
+    "language_en": "English",
+    "api_url": "AI API URL:",
+    "api_url_placeholder": "Enter AI API URL",
+    "api_key": "AI API Key:",
+    "api_key_placeholder": "Enter AI API Key",
+    "save": "Save Settings",
+    "saved": "Saved"
+  },
+  "messages": {
+    "import_failed": "Failed to import images",
+    "api_request_failed": "API request failed",
+    "api_no_image": "API returned no image data",
+    "processing_image": "Processing image...",
+    "image_analysis_failed": "Image analysis failed",
+    "no_valid_description": "No valid description received",
+    "search_placeholder": "Search images...",
+    "filename_search": "Filename search",
+    "description_search": "Description search",
+    "search_button": "Search",
+    "no_results": "No matching images found"
+  }
+}

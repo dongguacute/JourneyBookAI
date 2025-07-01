@@ -1,0 +1,37 @@
+{
+  "app": {
+    "title": "图片浏览器"
+  },
+  "menu": {
+    "images": "图片",
+    "settings": "设置"
+  },
+  "settings": {
+    "title": "设置",
+    "theme": "切换主题:",
+    "theme_light": "浅色模式",
+    "theme_dark": "深色模式",
+    "language": "选择语言:",
+    "language_zh": "中文",
+    "language_en": "English",
+    "api_url": "AI API 地址:",
+    "api_url_placeholder": "输入 AI API 地址",
+    "api_key": "AI API 密钥:",
+    "api_key_placeholder": "输入 AI API 密钥",
+    "save": "保存设置",
+    "saved": "已保存"
+  },
+  "messages": {
+    "import_failed": "导入图片失败",
+    "api_request_failed": "API 请求失败",
+    "api_no_image": "API 未返回图片数据",
+    "processing_image": "正在处理图片...",
+    "image_analysis_failed": "图片分析失败",
+    "no_valid_description": "未收到有效的描述",
+    "search_placeholder": "搜索图片...",
+    "filename_search": "按文件名搜索",
+    "description_search": "按描述搜索",
+    "search_button": "搜索",
+    "no_results": "未找到匹配的图片"
+  }
+}

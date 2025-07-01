@@ -83,7 +83,7 @@ jobs:
   release:
     needs: build-and-release
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true)
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
     steps:
       - name: Checkout code
@@ -94,11 +94,14 @@ jobs:
         with:
           path: ./artifacts
           
-      - name: List downloaded artifacts (debug)
-        run: |
-          echo "Downloaded artifacts:"
-          find ./artifacts -type f -name "*" | head -20
-          
+      - name: List downloaded artifacts
+        shell: bash
+        run: ls -la ./artifacts
+        
+      - name: List dist directory
+        shell: bash
+        run: ls -la dist/ || echo "dist directory not found"
+
       - name: Get commit count as version
         id: get_commit_count
         run: echo "COMMITS=$(git rev-list --count HEAD)" >> $GITHUB_OUTPUT
@@ -108,10 +111,6 @@ jobs:
           gh release create v1.0.${{ steps.get_commit_count.outputs.COMMITS }} \
             --title "Release v1.0.${{ steps.get_commit_count.outputs.COMMITS }}" \
             --notes "Auto-generated release for JourneyBookAI" \
-            ./artifacts/**/*.{exe,dmg,AppImage,deb,zip} || true
+            ./artifacts/**/*.{exe,dmg,AppImage,deb,zip}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: List dist directory
-        shell: bash
-        run: ls -la dist/ || echo "dist directory not found"

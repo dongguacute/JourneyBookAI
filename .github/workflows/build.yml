@@ -64,6 +64,7 @@ jobs:
           DEBUG: electron-builder
           
       - name: List build output (debug)
+        shell: bash
         run: |
           echo "Listing dist directory:"
           ls -la dist/ || echo "dist directory not found"

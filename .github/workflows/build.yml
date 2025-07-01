@@ -31,10 +31,7 @@ jobs:
           version: 10.10.0
           
       - name: Install dependencies
-        run: pnpm install
-        
-      - name: Add electron-builder
-        run: pnpm add -D electron-builder
+        run: pnpm install --no-frozen-lockfile
         
       - name: Build application (Ubuntu)
         if: matrix.os == 'ubuntu-latest'

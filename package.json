@@ -79,8 +79,6 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "installerIcon": "img/icon.ico",
-      "uninstallerIcon": "img/icon.ico"
     }
   },
   "keywords": ["electron", "photo", "ai", "album"],

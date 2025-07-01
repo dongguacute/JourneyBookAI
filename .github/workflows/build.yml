@@ -133,3 +133,7 @@ jobs:
           done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: List dist directory
+        shell: bash
+        run: ls -la dist/ || echo "dist directory not found"

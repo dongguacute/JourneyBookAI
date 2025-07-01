@@ -11,7 +11,8 @@
     "build:win": "electron-builder --win --publish=never",
     "build:mac": "electron-builder --mac --publish=never",
     "build:linux": "electron-builder --linux --publish=never",
-    "dist": "pnpm run build"
+    "dist": "pnpm run build",
+    "list-dist": "node -e \"const fs = require('fs'); try { const files = fs.readdirSync('dist'); console.log('dist contents:', files); } catch(e) { console.log('dist directory not found'); }\""
   },
   "build": {
     "appId": "com.journeybookai.app",

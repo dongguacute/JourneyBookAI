@@ -78,7 +78,7 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
+      "createStartMenuShortcut": true
     }
   },
   "keywords": ["electron", "photo", "ai", "album"],

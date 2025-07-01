@@ -103,35 +103,13 @@ jobs:
         id: get_version
         run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
         
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ steps.get_version.outputs.VERSION }}-${{ github.run_number }}
-          release_name: Release v${{ steps.get_version.outputs.VERSION }}-${{ github.run_number }}
-          body: |
-            Auto-generated release for JourneyBookAI
-            
-            Changes in this release:
-            - Latest changes from main branch
-            
-            ## Downloads
-            - Windows: `.exe` installer
-            - macOS: `.dmg` installer  
-            - Linux: `.AppImage` or `.deb` package
-          draft: false
-          prerelease: false
-          
-      - name: Upload Release Assets
+      - name: Create Release and Upload Assets
         run: |
-          for file in $(find ./artifacts -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.AppImage" -o -name "*.deb" -o -name "*.zip" \)); do
-            if [ -f "$file" ]; then
-              echo "Uploading $file"
-              gh release upload v${{ steps.get_version.outputs.VERSION }}-${{ github.run_number }} "$file" || echo "Failed to upload $file"
-            fi
-          done
+          # Create release
+          gh release create v${{ steps.get_version.outputs.VERSION }}-${{ github.run_number }} \
+            --title "Release v${{ steps.get_version.outputs.VERSION }}-${{ github.run_number }}" \
+            --notes "Auto-generated release for JourneyBookAI" \
+            ./artifacts/**/*.{exe,dmg,AppImage,deb,zip} || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -1,4 +1,3 @@
-
 {
   "name": "JourneyBookAI",
   "version": "1.0.0",
@@ -34,7 +33,7 @@
           "target": "nsis",
           "arch": ["x64"]
         }
-      ],
+      ]
     },
     "mac": {
       "target": [

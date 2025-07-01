@@ -111,6 +111,6 @@ jobs:
           gh release create v1.0.${{ steps.get_commit_count.outputs.COMMITS }} \
             --title "Release v1.0.${{ steps.get_commit_count.outputs.COMMITS }}" \
             --notes "Auto-generated release for JourneyBookAI" \
-            ./artifacts/**/*.{exe,dmg,AppImage,deb,zip}
+            ./artifacts/**/*.{exe,dmg,AppImage,deb}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

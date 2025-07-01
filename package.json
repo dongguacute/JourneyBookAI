@@ -11,8 +11,7 @@
     "build:win": "electron-builder --win --publish=never",
     "build:mac": "electron-builder --mac --publish=never",
     "build:linux": "electron-builder --linux --publish=never",
-    "dist": "pnpm run build",
-    "postinstall": "electron-builder install-app-deps"
+    "dist": "pnpm run build"
   },
   "build": {
     "appId": "com.journeybookai.app",
@@ -21,44 +20,21 @@
       "output": "dist"
     },
     "files": [
-      "**/*",
-      "!node_modules/**/*",
-      "!dist/**/*",
-      "!.git/**/*",
-      "!.github/**/*",
-      "!*.md",
-      "!.gitignore"
-    ],
-    "extraResources": [
-      {
-        "from": "img",
-        "to": "img",
-        "filter": ["**/*"]
-      },
-      {
-        "from": "search",
-        "to": "search",
-        "filter": ["**/*"]
-      }
+      "index.js",
+      "index.html",
+      "renderer.js",
+      "style.css",
+      "package.json",
+      "img/**/*",
+      "search/**/*",
+      "locales/**/*"
     ],
     "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": ["x64"]
-        }
-      ],
-      "artifactName": "${productName}-${version}-win-${arch}.${ext}"
+      "target": "nsis",
     },
     "mac": {
-      "target": [
-        {
-          "target": "dmg",
-          "arch": ["universal"]
-        }
-      ],
-      "category": "public.app-category.photography",
-      "artifactName": "${productName}-${version}-mac-${arch}.${ext}"
+      "target": "dmg",
+      "category": "public.app-category.photography"
     },
     "linux": {
       "target": [
@@ -72,7 +48,7 @@
         }
       ],
       "category": "Graphics",
-      "artifactName": "${productName}-${version}-linux-${arch}.${ext}"
+      "maintainer": "JourneyBookAI Team <support@journeybookai.com>"
     },
     "nsis": {
       "oneClick": false,
@@ -82,7 +58,10 @@
     }
   },
   "keywords": ["electron", "photo", "ai", "album"],
-  "author": "",
+  "author": {
+    "name": "Cherry Fu",
+    "email": "me@dongguact.top"
+  },
   "license": "MIT",
   "packageManager": "pnpm@10.10.0",
   "devDependencies": {

@@ -30,7 +30,7 @@
       "locales/**/*"
     ],
     "win": {
-      "target": "nsis",
+      "target": "nsis"
     },
     "mac": {
       "target": "dmg",
